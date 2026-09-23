@@ -26,3 +26,9 @@ class SkillResponse(SkillBase):
     updated_at: datetime
 
     model_config = ConfigDict(from_attributes=True)
+
+class SkillListResponse(BaseModel):
+    items: list[SkillResponse]
+    total: int
+    limit: int
+    offset: int

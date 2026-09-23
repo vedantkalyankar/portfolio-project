@@ -1,6 +1,6 @@
 from uuid import UUID
 
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from app.api.dependencies import require_admin
 from app.db.session import get_db
@@ -8,6 +8,7 @@ from app.schemas.skill import (
     SkillCreate,
     SkillResponse,
     SkillUpdate,
+    SkillListResponse,
 )
 from app.services import skill as skill_service
 
@@ -20,13 +21,32 @@ router = APIRouter(
 
 @router.get(
     "",
-    response_model=list[SkillResponse],
+    response_model=SkillListResponse,
 )
 def list_skills(
+    limit: int = Query(
+        default=10,
+        ge=1,
+        le=100,
+    ),
+    offset: int = Query(
+        default=0,
+        ge=0,
+    ),
     db: Session = Depends(get_db),
 ):
-    return skill_service.get_skills(db)
+    skills, total = skill_service.get_skills(
+        db,
+        limit=limit,
+        offset=offset,
+    )
 
+    return {
+        "items": skills,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
 
 @router.get(
     "/{skill_id}",

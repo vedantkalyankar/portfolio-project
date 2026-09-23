@@ -1,16 +1,30 @@
 from uuid import UUID
 
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.skill import Skill
 from app.schemas.skill import SkillCreate, SkillUpdate
 
+def get_skills(
+    db: Session,
+    limit: int = 10,
+    offset: int = 0,
+) -> tuple[list[Skill], int]:
+    statement = (
+        select(Skill)
+        .order_by(Skill.created_at.desc())
+        .offset(offset)
+        .limit(limit)
+    )
 
-def get_skills(db: Session) -> list[Skill]:
-    statement = select(Skill).order_by(Skill.created_at.desc())
-    return list(db.scalars(statement).all())
+    skills = list(db.scalars(statement).all())
 
+    total = db.scalar(
+        select(func.count()).select_from(Skill)
+    ) or 0
+
+    return skills, total
 
 def get_skill(db: Session, skill_id: UUID) -> Skill | None:
     return db.get(Skill, skill_id)

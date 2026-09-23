@@ -1,16 +1,30 @@
 from uuid import UUID
-
-from sqlalchemy import select
+from sqlalchemy import func, select
 from sqlalchemy.orm import Session
 
 from app.models.project import Project
 from app.schemas.project import ProjectCreate, ProjectUpdate
 
 
-def get_projects(db: Session) -> list[Project]:
-    statement = select(Project).order_by(Project.created_at.desc())
+def get_projects(
+    db: Session,
+    limit: int = 10,
+    offset: int = 0,
+) -> tuple[list[Project], int]:
+    statement = (
+        select(Project)
+        .order_by(Project.created_at.desc())
+        .offset(offset)
+        .limit(limit)
+    )
 
-    return list(db.scalars(statement).all())
+    projects = list(db.scalars(statement).all())
+
+    total = db.scalar(
+        select(func.count()).select_from(Project)
+    ) or 0
+
+    return projects, total
 
 
 def get_project(

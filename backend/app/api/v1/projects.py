@@ -1,12 +1,12 @@
 from uuid import UUID
-
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException, Query, status
 from sqlalchemy.orm import Session
 from app.api.dependencies import require_admin
 
 from app.db.session import get_db
 from app.schemas.project import (
     ProjectCreate,
+    ProjectListResponse,
     ProjectResponse,
     ProjectUpdate,
 )
@@ -18,15 +18,34 @@ router = APIRouter(
     tags=["Projects"],
 )
 
-
 @router.get(
     "",
-    response_model=list[ProjectResponse],
+    response_model=ProjectListResponse,
 )
 def list_projects(
+    limit: int = Query(
+        default=10,
+        ge=1,
+        le=100,
+    ),
+    offset: int = Query(
+        default=0,
+        ge=0,
+    ),
     db: Session = Depends(get_db),
 ):
-    return project_service.get_projects(db)
+    projects, total = project_service.get_projects(
+        db,
+        limit=limit,
+        offset=offset,
+    )
+
+    return {
+        "items": projects,
+        "total": total,
+        "limit": limit,
+        "offset": offset,
+    }
 
 
 @router.get(

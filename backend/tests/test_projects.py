@@ -35,14 +35,23 @@ def test_list_projects(client, admin_headers):
         json=project_payload(),
         headers=admin_headers,
     )
+
     response = client.get("/api/v1/projects")
 
     assert response.status_code == 200
 
     data = response.json()
 
-    assert isinstance(data, list)
-    assert len(data) >= 1
+    assert isinstance(data, dict)
+    assert "items" in data
+    assert "total" in data
+    assert "limit" in data
+    assert "offset" in data
+
+    assert len(data["items"]) == 1
+    assert data["total"] == 1
+    assert data["limit"] == 10
+    assert data["offset"] == 0
 
 
 def test_get_project(client, admin_headers):
@@ -213,3 +222,76 @@ def test_delete_project_service(db_session):
     deleted_project = db_session.get(Project, project.id)
 
     assert deleted_project is None
+
+def test_list_projects_with_limit(client, admin_headers):
+    for index in range(5):
+        response = client.post(
+            "/api/v1/projects",
+            json={
+                "title": f"Project {index}",
+                "description": f"Description {index}",
+            },
+            headers=admin_headers,
+        )
+
+        assert response.status_code == 201
+
+    response = client.get(
+        "/api/v1/projects?limit=2&offset=0",
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data["items"]) == 2
+    assert data["total"] == 5
+    assert data["limit"] == 2
+    assert data["offset"] == 0
+
+def test_list_projects_with_offset(client, admin_headers):
+    for index in range(5):
+        response = client.post(
+            "/api/v1/projects",
+            json={
+                "title": f"Project {index}",
+                "description": f"Description {index}",
+            },
+            headers=admin_headers,
+        )
+
+        assert response.status_code == 201
+
+    response = client.get(
+        "/api/v1/projects?limit=2&offset=2",
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data["items"]) == 2
+    assert data["total"] == 5
+    assert data["limit"] == 2
+    assert data["offset"] == 2
+
+def test_list_projects_invalid_limit(client):
+    response = client.get(
+        "/api/v1/projects?limit=0",
+    )
+
+    assert response.status_code == 422
+
+def test_list_projects_limit_too_large(client):
+    response = client.get(
+        "/api/v1/projects?limit=101",
+    )
+
+    assert response.status_code == 422
+
+def test_list_projects_negative_offset(client):
+    response = client.get(
+        "/api/v1/projects?offset=-1",
+    )
+
+    assert response.status_code == 422

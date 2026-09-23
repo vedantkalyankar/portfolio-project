@@ -25,7 +25,6 @@ def test_create_skill(client, admin_headers):
     assert "created_at" in data
     assert "updated_at" in data
 
-
 def test_list_skills(client, admin_headers):
     client.post(
         "/api/v1/skills",
@@ -39,9 +38,95 @@ def test_list_skills(client, admin_headers):
 
     data = response.json()
 
-    assert isinstance(data, list)
-    assert len(data) >= 1
+    assert isinstance(data, dict)
+    assert "items" in data
+    assert "total" in data
+    assert "limit" in data
+    assert "offset" in data
 
+    assert len(data["items"]) == 1
+    assert data["total"] == 1
+    assert data["limit"] == 10
+    assert data["offset"] == 0
+
+def test_list_skills_with_limit(client, admin_headers):
+    for index in range(5):
+        response = client.post(
+            "/api/v1/skills",
+            json={
+                "name": f"Skill {index}",
+                "category": "Backend",
+                "proficiency": "Advanced",
+            },
+            headers=admin_headers,
+        )
+
+        assert response.status_code == 201
+
+    response = client.get(
+        "/api/v1/skills?limit=2&offset=0",
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data["items"]) == 2
+    assert data["total"] == 5
+    assert data["limit"] == 2
+    assert data["offset"] == 0
+
+
+def test_list_skills_with_offset(client, admin_headers):
+    for index in range(5):
+        response = client.post(
+            "/api/v1/skills",
+            json={
+                "name": f"Skill {index}",
+                "category": "Backend",
+                "proficiency": "Advanced",
+            },
+            headers=admin_headers,
+        )
+
+        assert response.status_code == 201
+
+    response = client.get(
+        "/api/v1/skills?limit=2&offset=2",
+    )
+
+    assert response.status_code == 200
+
+    data = response.json()
+
+    assert len(data["items"]) == 2
+    assert data["total"] == 5
+    assert data["limit"] == 2
+    assert data["offset"] == 2
+
+
+def test_list_skills_invalid_limit(client):
+    response = client.get(
+        "/api/v1/skills?limit=0",
+    )
+
+    assert response.status_code == 422
+
+
+def test_list_skills_limit_too_large(client):
+    response = client.get(
+        "/api/v1/skills?limit=101",
+    )
+
+    assert response.status_code == 422
+
+
+def test_list_skills_negative_offset(client):
+    response = client.get(
+        "/api/v1/skills?offset=-1",
+    )
+
+    assert response.status_code == 422
 
 def test_get_skill(client, admin_headers):
     create_response = client.post(

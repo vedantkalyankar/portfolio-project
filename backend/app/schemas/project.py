@@ -50,4 +50,9 @@ class ProjectResponse(ProjectBase):
     model_config = ConfigDict(
         from_attributes=True,
     )
-    
+
+class ProjectListResponse(BaseModel):
+    items: list[ProjectResponse]
+    total: int
+    limit: int
+    offset: int
