@@ -16,6 +16,36 @@ from app.schemas.user import (
     UserCreate,
     UserResponse,
 )
+from app.schemas.about import (
+    AboutBase,
+    AboutCreate,
+    AboutResponse,
+    AboutUpdate,
+)
+from app.schemas.blog import (
+    BlogBase,
+    BlogCreate,
+    BlogResponse,
+    BlogUpdate,
+)
+from app.schemas.experience import (
+    ExperienceBase,
+    ExperienceCreate,
+    ExperienceUpdate,
+    ExperienceResponse,
+)
+from app.schemas.testimonial import (
+    TestimonialBase,
+    TestimonialCreate,
+    TestimonialUpdate,
+    TestimonialResponse,
+)
+from app.schemas.service import (
+    ServiceBase,
+    ServiceCreate,
+    ServiceUpdate,
+    ServiceResponse,
+)
 __all__ = [
     "ProjectCreate",
     "ProjectResponse",

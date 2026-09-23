@@ -1,4 +1,10 @@
 from app.models.project import Project
 from app.models.skill import Skill
 from app.models.user import User
+from app.models.about import About
+from app.models.blog import Blog
+from app.models.experience import Experience
+from app.models.testimonial import Testimonial
+from app.models.service import Service
+
 __all__ = ["Project"]
