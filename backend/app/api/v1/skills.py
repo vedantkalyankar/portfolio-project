@@ -2,7 +2,7 @@ from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
+from app.api.dependencies import require_admin
 from app.db.session import get_db
 from app.schemas.skill import (
     SkillCreate,
@@ -55,6 +55,7 @@ def get_skill(
 def create_skill(
     skill_data: SkillCreate,
     db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     return skill_service.create_skill(db, skill_data)
 
@@ -67,6 +68,7 @@ def update_skill(
     skill_id: UUID,
     skill_data: SkillUpdate,
     db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     skill = skill_service.get_skill(db, skill_id)
 
@@ -90,6 +92,7 @@ def update_skill(
 def delete_skill(
     skill_id: UUID,
     db: Session = Depends(get_db),
+    current_user=Depends(require_admin)
 ):
     skill = skill_service.get_skill(db, skill_id)
 

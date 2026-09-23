@@ -4,6 +4,8 @@ import pytest
 from fastapi.testclient import TestClient
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
+from app.core.security import hash_password, create_access_token
+from app.models import User
 
 from app.db.session import Base, get_db
 from app.main import app
@@ -38,14 +40,17 @@ def setup_database():
 
 @pytest.fixture()
 def db_session():
+    Base.metadata.drop_all(bind=test_engine)
+    Base.metadata.create_all(bind=test_engine)
+
     session = TestingSessionLocal()
 
     try:
         yield session
     finally:
-        session.rollback()
         session.close()
-
+        Base.metadata.drop_all(bind=test_engine)
+        Base.metadata.create_all(bind=test_engine)
 
 @pytest.fixture()
 def client(db_session):
@@ -61,3 +66,27 @@ def client(db_session):
         yield test_client
 
     app.dependency_overrides.clear()
+
+@pytest.fixture()
+def admin_user(db_session):
+    user = User(
+        username="test-admin",
+        password_hash=hash_password("TestPassword123!"),
+        is_active=True,
+        is_admin=True,
+    )
+
+    db_session.add(user)
+    db_session.commit()
+    db_session.refresh(user)
+
+    return user
+
+
+@pytest.fixture()
+def admin_headers(admin_user):
+    token = create_access_token(str(admin_user.id))
+
+    return {
+        "Authorization": f"Bearer {token}",
+    }

@@ -9,6 +9,13 @@ from app.schemas.skill import (
     SkillResponse,
     SkillUpdate,
 )
+
+from app.schemas.user import (
+    LoginRequest,
+    TokenResponse,
+    UserCreate,
+    UserResponse,
+)
 __all__ = [
     "ProjectCreate",
     "ProjectResponse",

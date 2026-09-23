@@ -6,10 +6,11 @@ def skill_payload():
     }
 
 
-def test_create_skill(client):
+def test_create_skill(client, admin_headers):
     response = client.post(
         "/api/v1/skills",
         json=skill_payload(),
+        headers=admin_headers,
     )
 
     assert response.status_code == 201
@@ -25,10 +26,11 @@ def test_create_skill(client):
     assert "updated_at" in data
 
 
-def test_list_skills(client):
+def test_list_skills(client, admin_headers):
     client.post(
         "/api/v1/skills",
         json=skill_payload(),
+        headers=admin_headers,
     )
 
     response = client.get("/api/v1/skills")
@@ -41,10 +43,11 @@ def test_list_skills(client):
     assert len(data) >= 1
 
 
-def test_get_skill(client):
+def test_get_skill(client, admin_headers):
     create_response = client.post(
         "/api/v1/skills",
         json=skill_payload(),
+        headers=admin_headers,
     )
 
     skill_id = create_response.json()["id"]
@@ -72,10 +75,11 @@ def test_get_nonexistent_skill(client):
     assert response.json()["detail"] == "Skill not found"
 
 
-def test_update_skill(client):
+def test_update_skill(client, admin_headers):
     create_response = client.post(
         "/api/v1/skills",
         json=skill_payload(),
+        headers=admin_headers,
     )
 
     skill_id = create_response.json()["id"]
@@ -87,6 +91,7 @@ def test_update_skill(client):
             "category": "Backend",
             "proficiency": "Advanced",
         },
+        headers=admin_headers,
     )
 
     assert response.status_code == 200
@@ -99,10 +104,11 @@ def test_update_skill(client):
     assert data["proficiency"] == "Advanced"
 
 
-def test_partial_update_skill(client):
+def test_partial_update_skill(client, admin_headers):
     create_response = client.post(
         "/api/v1/skills",
         json=skill_payload(),
+        headers=admin_headers,
     )
 
     skill_id = create_response.json()["id"]
@@ -112,6 +118,7 @@ def test_partial_update_skill(client):
         json={
             "proficiency": "Expert",
         },
+        headers=admin_headers,
     )
 
     assert response.status_code == 200
@@ -123,16 +130,18 @@ def test_partial_update_skill(client):
     assert data["proficiency"] == "Expert"
 
 
-def test_delete_skill(client):
+def test_delete_skill(client, admin_headers):
     create_response = client.post(
         "/api/v1/skills",
         json=skill_payload(),
+        headers=admin_headers,
     )
 
     skill_id = create_response.json()["id"]
 
     delete_response = client.delete(
-        f"/api/v1/skills/{skill_id}"
+        f"/api/v1/skills/{skill_id}",
+        headers=admin_headers,
     )
 
     assert delete_response.status_code == 204
@@ -144,7 +153,7 @@ def test_delete_skill(client):
     assert get_response.status_code == 404
 
 
-def test_update_nonexistent_skill(client):
+def test_update_nonexistent_skill(client, admin_headers):
     nonexistent_id = "00000000-0000-0000-0000-000000000000"
 
     response = client.patch(
@@ -152,17 +161,19 @@ def test_update_nonexistent_skill(client):
         json={
             "name": "Python",
         },
+        headers=admin_headers,
     )
 
     assert response.status_code == 404
     assert response.json()["detail"] == "Skill not found"
 
 
-def test_delete_nonexistent_skill(client):
+def test_delete_nonexistent_skill(client, admin_headers):
     nonexistent_id = "00000000-0000-0000-0000-000000000000"
 
     response = client.delete(
-        f"/api/v1/skills/{nonexistent_id}"
+        f"/api/v1/skills/{nonexistent_id}",
+        headers=admin_headers,
     )
 
     assert response.status_code == 404
@@ -177,16 +188,16 @@ def test_invalid_skill_uuid(client):
     assert response.status_code == 422
 
 
-def test_missing_required_skill_fields(client):
+def test_missing_required_skill_fields(client, admin_headers):
     response = client.post(
         "/api/v1/skills",
         json={},
+        headers=admin_headers,
     )
-
     assert response.status_code == 422
 
 
-def test_invalid_skill_field_lengths(client):
+def test_invalid_skill_field_lengths(client, admin_headers):
     response = client.post(
         "/api/v1/skills",
         json={
@@ -194,6 +205,6 @@ def test_invalid_skill_field_lengths(client):
             "category": "",
             "proficiency": "",
         },
+        headers=admin_headers,
     )
-
     assert response.status_code == 422

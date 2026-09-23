@@ -9,12 +9,12 @@ def project_payload():
     }
 
 
-def test_create_project(client):
+def test_create_project(client, admin_headers):
     response = client.post(
         "/api/v1/projects",
         json=project_payload(),
+        headers=admin_headers
     )
-
     assert response.status_code == 201
 
     data = response.json()
@@ -29,12 +29,12 @@ def test_create_project(client):
     assert "updated_at" in data
 
 
-def test_list_projects(client):
+def test_list_projects(client, admin_headers):
     client.post(
         "/api/v1/projects",
         json=project_payload(),
+        headers=admin_headers,
     )
-
     response = client.get("/api/v1/projects")
 
     assert response.status_code == 200
@@ -45,12 +45,12 @@ def test_list_projects(client):
     assert len(data) >= 1
 
 
-def test_get_project(client):
+def test_get_project(client, admin_headers):
     create_response = client.post(
         "/api/v1/projects",
         json=project_payload(),
+        headers=admin_headers,
     )
-
     project_id = create_response.json()["id"]
 
     response = client.get(
@@ -76,12 +76,12 @@ def test_get_nonexistent_project(client):
     assert response.json()["detail"] == "Project not found"
 
 
-def test_update_project(client):
+def test_update_project(client, admin_headers):
     create_response = client.post(
         "/api/v1/projects",
         json=project_payload(),
+        headers=admin_headers,
     )
-
     project_id = create_response.json()["id"]
 
     update_payload = {
@@ -92,8 +92,8 @@ def test_update_project(client):
     response = client.patch(
         f"/api/v1/projects/{project_id}",
         json=update_payload,
+        headers=admin_headers,
     )
-
     assert response.status_code == 200
 
     data = response.json()
@@ -103,12 +103,12 @@ def test_update_project(client):
     assert data["description"] == "Updated project description."
 
 
-def test_partial_update_project(client):
+def test_partial_update_project(client, admin_headers):
     create_response = client.post(
         "/api/v1/projects",
         json=project_payload(),
+        headers=admin_headers,
     )
-
     project_id = create_response.json()["id"]
 
     response = client.patch(
@@ -116,8 +116,8 @@ def test_partial_update_project(client):
         json={
             "title": "Only Title Changed",
         },
+        headers=admin_headers,
     )
-
     assert response.status_code == 200
 
     data = response.json()
@@ -126,18 +126,18 @@ def test_partial_update_project(client):
     assert data["description"] == "Project created during automated testing."
 
 
-def test_delete_project(client):
+def test_delete_project(client, admin_headers):
     create_response = client.post(
         "/api/v1/projects",
         json=project_payload(),
-    )
-
+        headers=admin_headers,
+    )   
     project_id = create_response.json()["id"]
 
     delete_response = client.delete(
-        f"/api/v1/projects/{project_id}"
+        f"/api/v1/projects/{project_id}",
+        headers=admin_headers,
     )
-
     assert delete_response.status_code == 204
 
     get_response = client.get(
@@ -155,27 +155,27 @@ def test_invalid_project_uuid(client):
     assert response.status_code == 422
 
 
-def test_invalid_github_url(client):
+def test_invalid_github_url(client, admin_headers):
     payload = project_payload()
     payload["github_url"] = "not-a-url"
 
     response = client.post(
         "/api/v1/projects",
         json=payload,
+        headers=admin_headers,
     )
-
     assert response.status_code == 422
 
 
-def test_missing_required_fields(client):
+def test_missing_required_fields(client, admin_headers):
     response = client.post(
         "/api/v1/projects",
         json={},
+        headers=admin_headers,
     )
-
     assert response.status_code == 422
 
-def test_update_nonexistent_project(client):
+def test_update_nonexistent_project(client, admin_headers):
     nonexistent_id = "00000000-0000-0000-0000-000000000000"
 
     response = client.patch(
@@ -183,18 +183,18 @@ def test_update_nonexistent_project(client):
         json={
             "title": "Updated Project",
         },
+        headers=admin_headers,
     )
-
     assert response.status_code == 404
     assert response.json()["detail"] == "Project not found"
 
-def test_delete_nonexistent_project(client):
+def test_delete_nonexistent_project(client, admin_headers):
     nonexistent_id = "00000000-0000-0000-0000-000000000000"
 
     response = client.delete(
-        f"/api/v1/projects/{nonexistent_id}"
+        f"/api/v1/projects/{nonexistent_id}",
+        headers=admin_headers,
     )
-
     assert response.status_code == 404
     assert response.json()["detail"] == "Project not found"
 
