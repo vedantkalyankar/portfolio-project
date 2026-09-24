@@ -6,5 +6,6 @@ from app.models.blog import Blog
 from app.models.experience import Experience
 from app.models.testimonial import Testimonial
 from app.models.service import Service
+from app.models.upload import Upload
 
 __all__ = ["Project"]
