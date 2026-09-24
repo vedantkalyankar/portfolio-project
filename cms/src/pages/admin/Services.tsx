@@ -43,11 +43,12 @@ export default function Services() {
   const [success, setSuccess] = useState("");
 
   const loadServices = async () => {
-    setLoading(true);
-    setError("");
-
     try {
+      setLoading(true);
+      setError("");
+
       const data = await getServices();
+
       setServices(data);
     } catch {
       setError("Failed to load services.");
@@ -68,14 +69,24 @@ export default function Services() {
       ...current,
       [field]: value,
     }));
+
+    setSuccess("");
   };
 
-  const handleAdd = () => {
-    setEditingId(null);
+  const openAddForm = () => {
     setForm(EMPTY_FORM);
+    setEditingId(null);
     setError("");
     setSuccess("");
     setShowForm(true);
+  };
+
+  const cancelForm = () => {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setError("");
+    setSuccess("");
+    setShowForm(false);
   };
 
   const handleEdit = async (id: string) => {
@@ -91,19 +102,11 @@ export default function Services() {
         icon: service.icon,
       });
 
-      setEditingId(id);
+      setEditingId(service.id);
       setShowForm(true);
     } catch {
       setError("Failed to load service.");
     }
-  };
-
-  const handleCancel = () => {
-    setShowForm(false);
-    setEditingId(null);
-    setForm(EMPTY_FORM);
-    setError("");
-    setSuccess("");
   };
 
   const handleSubmit = async (
@@ -111,17 +114,23 @@ export default function Services() {
   ) => {
     event.preventDefault();
 
-    setSaving(true);
-    setError("");
-    setSuccess("");
-
     try {
+      setSaving(true);
+      setError("");
+      setSuccess("");
+
       if (editingId) {
         await updateService(editingId, form);
-        setSuccess("Service updated successfully.");
+
+        setSuccess(
+          "Service updated successfully.",
+        );
       } else {
         await createService(form);
-        setSuccess("Service created successfully.");
+
+        setSuccess(
+          "Service created successfully.",
+        );
       }
 
       setForm(EMPTY_FORM);
@@ -155,7 +164,10 @@ export default function Services() {
     try {
       await deleteService(id);
 
-      setSuccess("Service deleted successfully.");
+      setSuccess(
+        "Service deleted successfully.",
+      );
+
       await loadServices();
     } catch {
       setError("Failed to delete service.");
@@ -163,232 +175,297 @@ export default function Services() {
   };
 
   return (
-    <section>
+    <div className="crud-page">
       {!showForm ? (
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <h1>Services</h1>
+          <section className="crud-header">
+            <div>
+              <p className="crud-eyebrow">
+                WHAT I OFFER
+              </p>
 
-            <button onClick={handleAdd}>
-              + Add Service
-            </button>
-          </div>
+              <h1>Services</h1>
 
-          {loading && <p>Loading services...</p>}
+              <p className="crud-description">
+                Manage the services displayed on your
+                portfolio.
+              </p>
+            </div>
 
-          {error && <p>{error}</p>}
-          {success && <p>{success}</p>}
+            <div className="crud-header-action">
+              <button
+                type="button"
+                className="crud-button crud-button-primary"
+                onClick={openAddForm}
+              >
+                + Add Service
+              </button>
+            </div>
+          </section>
 
-          {!loading && services.length === 0 && (
-            <p>No services found.</p>
-          )}
-
-          {!loading && services.length > 0 && (
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-              }}
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
             >
-              <thead>
-                <tr>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Title
-                  </th>
-
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Description
-                  </th>
-
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Icon
-                  </th>
-
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {services.map((service) => (
-                  <tr key={service.id}>
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                      }}
-                    >
-                      {service.title}
-                    </td>
-
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                        maxWidth: "450px",
-                      }}
-                    >
-                      {service.description}
-                    </td>
-
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                      }}
-                    >
-                      {service.icon}
-                    </td>
-
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <button
-                        onClick={() =>
-                          handleEdit(service.id)
-                        }
-                        style={{ marginRight: "8px" }}
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleDelete(service.id)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              {error}
+            </div>
           )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-list-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Service list</h2>
+
+                <p>
+                  View and manage the services available
+                  on your portfolio.
+                </p>
+              </div>
+
+              <div className="crud-section-count">
+                {services.length}{" "}
+                {services.length === 1
+                  ? "service"
+                  : "services"}
+              </div>
+            </div>
+
+            {loading ? (
+              <div className="crud-state">
+                <p>Loading services...</p>
+              </div>
+            ) : services.length === 0 ? (
+              <div className="crud-state">
+                <h3>No services yet</h3>
+
+                <p>
+                  Add your first service using the button
+                  above.
+                </p>
+              </div>
+            ) : (
+              <div className="crud-table-wrapper">
+                <table className="crud-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Description</th>
+                      <th>Icon</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {services.map((service) => (
+                      <tr key={service.id}>
+                        <td>
+                          <div className="crud-project-title">
+                            {service.title}
+                          </div>
+                        </td>
+
+                        <td>
+                          <div className="crud-project-description">
+                            {service.description}
+                          </div>
+                        </td>
+
+                        <td>
+                          <span className="crud-skill-proficiency">
+                            {service.icon}
+                          </span>
+                        </td>
+
+                        <td>
+                          <div className="crud-row-actions">
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small"
+                              onClick={() =>
+                                handleEdit(service.id)
+                              }
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small crud-button-danger"
+                              onClick={() =>
+                                handleDelete(service.id)
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
         </>
       ) : (
         <>
-          <h1>
-            {editingId
-              ? "Edit Service"
-              : "Add Service"}
-          </h1>
-
-          {error && <p>{error}</p>}
-
-          <form onSubmit={handleSubmit}>
+          <section className="crud-header">
             <div>
-              <label htmlFor="service-title">
-                Title
-              </label>
+              <p className="crud-eyebrow">
+                WHAT I OFFER
+              </p>
 
-              <input
-                id="service-title"
-                type="text"
-                value={form.title}
-                onChange={(event) =>
-                  handleChange("title", event.target.value)
-                }
-                required
-              />
+              <h1>
+                {editingId
+                  ? "Edit Service"
+                  : "Add Service"}
+              </h1>
+
+              <p className="crud-description">
+                {editingId
+                  ? "Update the service information below."
+                  : "Add a new service to your portfolio."}
+              </p>
+            </div>
+          </section>
+
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-form-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Service details</h2>
+
+                <p>
+                  Enter the information for the service
+                  displayed on your portfolio.
+                </p>
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="service-description">
-                Description
-              </label>
+            <form
+              className="crud-form"
+              onSubmit={handleSubmit}
+            >
+              <div className="crud-form-grid">
+                <div className="crud-field">
+                  <label htmlFor="service-title">
+                    Title
+                  </label>
 
-              <textarea
-                id="service-description"
-                value={form.description}
-                onChange={(event) =>
-                  handleChange(
-                    "description",
-                    event.target.value,
-                  )
-                }
-                rows={6}
-                required
-              />
-            </div>
+                  <input
+                    id="service-title"
+                    type="text"
+                    value={form.title}
+                    onChange={(event) =>
+                      handleChange(
+                        "title",
+                        event.target.value,
+                      )
+                    }
+                    placeholder="Enter service title"
+                    required
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="service-icon">
-                Icon
-              </label>
+                <div className="crud-field">
+                  <label htmlFor="service-icon">
+                    Icon
+                  </label>
 
-              <input
-                id="service-icon"
-                type="text"
-                value={form.icon}
-                onChange={(event) =>
-                  handleChange("icon", event.target.value)
-                }
-                placeholder="e.g. code"
-                required
-              />
-            </div>
+                  <input
+                    id="service-icon"
+                    type="text"
+                    value={form.icon}
+                    onChange={(event) =>
+                      handleChange(
+                        "icon",
+                        event.target.value,
+                      )
+                    }
+                    placeholder="e.g. code"
+                    required
+                  />
 
-            <div style={{ marginTop: "20px" }}>
-              <button
-                type="submit"
-                disabled={saving}
-                style={{ marginRight: "10px" }}
-              >
-                {saving
-                  ? "Saving..."
-                  : editingId
-                    ? "Update Service"
-                    : "Add Service"}
-              </button>
+                  <p className="crud-field-help">
+                    Enter the icon identifier used by your
+                    portfolio frontend.
+                  </p>
+                </div>
+              </div>
 
-              <button
-                type="button"
-                onClick={handleCancel}
-                disabled={saving}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+              <div className="crud-field">
+                <label htmlFor="service-description">
+                  Description
+                </label>
+
+                <textarea
+                  id="service-description"
+                  value={form.description}
+                  onChange={(event) =>
+                    handleChange(
+                      "description",
+                      event.target.value,
+                    )
+                  }
+                  rows={8}
+                  placeholder="Describe the service you provide."
+                  required
+                />
+              </div>
+
+              <div className="crud-form-actions">
+                <button
+                  type="submit"
+                  className="crud-button crud-button-primary"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : editingId
+                      ? "Update Service"
+                      : "Add Service"}
+                </button>
+
+                <button
+                  type="button"
+                  className="crud-button crud-button-secondary"
+                  onClick={cancelForm}
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
         </>
       )}
-    </section>
+    </div>
   );
 }

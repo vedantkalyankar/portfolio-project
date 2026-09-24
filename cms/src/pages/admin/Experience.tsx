@@ -34,7 +34,6 @@ const EMPTY_FORM: ExperienceForm = {
 };
 
 const ROLE_OPTIONS = [
-  // Entry Level
   "Intern",
   "Trainee",
   "Apprentice",
@@ -44,7 +43,6 @@ const ROLE_OPTIONS = [
   "Junior Developer",
   "Junior Software Developer",
 
-  // Development
   "Software Engineer",
   "Software Developer",
   "Web Developer",
@@ -60,7 +58,6 @@ const ROLE_OPTIONS = [
   "Django Developer",
   "FastAPI Developer",
 
-  // QA / Testing
   "QA Engineer",
   "Software Test Engineer",
   "Test Engineer",
@@ -69,7 +66,6 @@ const ROLE_OPTIONS = [
   "SDET",
   "Senior SDET",
 
-  // Data / AI
   "Data Analyst",
   "Data Engineer",
   "Junior Data Scientist",
@@ -79,7 +75,6 @@ const ROLE_OPTIONS = [
   "Generative AI Engineer",
   "ML Engineer",
 
-  // Mid Level
   "Software Engineer II",
   "Software Developer II",
   "Application Engineer",
@@ -97,7 +92,6 @@ const ROLE_OPTIONS = [
   "Senior Machine Learning Engineer",
   "Senior AI Engineer",
 
-  // Lead
   "Technical Lead",
   "Team Lead",
   "Software Development Lead",
@@ -114,7 +108,6 @@ const ROLE_OPTIONS = [
   "Lead Machine Learning Engineer",
   "Lead AI Engineer",
 
-  // Architecture
   "Solution Architect",
   "Software Architect",
   "Application Architect",
@@ -127,7 +120,6 @@ const ROLE_OPTIONS = [
   "Principal Software Engineer",
   "Principal Developer",
 
-  // Management
   "Engineering Manager",
   "Software Engineering Manager",
   "Development Manager",
@@ -145,7 +137,6 @@ const ROLE_OPTIONS = [
 ];
 
 const LOCATION_OPTIONS = [
-  // India
   "Ahmedabad, India",
   "Bengaluru, India",
   "Bhopal, India",
@@ -170,7 +161,6 @@ const LOCATION_OPTIONS = [
   "Vadodara, India",
   "Visakhapatnam, India",
 
-  // United States
   "Austin, United States",
   "Boston, United States",
   "Chicago, United States",
@@ -188,7 +178,6 @@ const LOCATION_OPTIONS = [
   "Seattle, United States",
   "Washington, United States",
 
-  // Canada
   "Calgary, Canada",
   "Edmonton, Canada",
   "Montreal, Canada",
@@ -197,7 +186,6 @@ const LOCATION_OPTIONS = [
   "Vancouver, Canada",
   "Winnipeg, Canada",
 
-  // United Kingdom
   "Birmingham, United Kingdom",
   "Bristol, United Kingdom",
   "Cambridge, United Kingdom",
@@ -209,13 +197,11 @@ const LOCATION_OPTIONS = [
   "Manchester, United Kingdom",
   "Oxford, United Kingdom",
 
-  // Ireland
   "Cork, Ireland",
   "Dublin, Ireland",
   "Galway, Ireland",
   "Limerick, Ireland",
 
-  // Germany
   "Berlin, Germany",
   "Cologne, Germany",
   "Dresden, Germany",
@@ -224,7 +210,6 @@ const LOCATION_OPTIONS = [
   "Munich, Germany",
   "Stuttgart, Germany",
 
-  // France
   "Bordeaux, France",
   "Lille, France",
   "Lyon, France",
@@ -234,21 +219,18 @@ const LOCATION_OPTIONS = [
   "Paris, France",
   "Toulouse, France",
 
-  // Netherlands
   "Amsterdam, Netherlands",
   "Eindhoven, Netherlands",
   "Rotterdam, Netherlands",
   "The Hague, Netherlands",
   "Utrecht, Netherlands",
 
-  // Switzerland
   "Basel, Switzerland",
   "Bern, Switzerland",
   "Geneva, Switzerland",
   "Lausanne, Switzerland",
   "Zurich, Switzerland",
 
-  // Spain
   "Barcelona, Spain",
   "Bilbao, Spain",
   "Madrid, Spain",
@@ -256,7 +238,6 @@ const LOCATION_OPTIONS = [
   "Seville, Spain",
   "Valencia, Spain",
 
-  // Italy
   "Bologna, Italy",
   "Florence, Italy",
   "Milan, Italy",
@@ -264,101 +245,79 @@ const LOCATION_OPTIONS = [
   "Rome, Italy",
   "Turin, Italy",
 
-  // Portugal
   "Lisbon, Portugal",
   "Porto, Portugal",
 
-  // Sweden
   "Gothenburg, Sweden",
   "Malmo, Sweden",
   "Stockholm, Sweden",
 
-  // Norway
   "Bergen, Norway",
   "Oslo, Norway",
   "Trondheim, Norway",
 
-  // Denmark
   "Aarhus, Denmark",
   "Copenhagen, Denmark",
 
-  // Finland
   "Espoo, Finland",
   "Helsinki, Finland",
   "Tampere, Finland",
 
-  // Poland
   "Krakow, Poland",
   "Poznan, Poland",
   "Warsaw, Poland",
   "Wroclaw, Poland",
 
-  // Czech Republic
   "Brno, Czech Republic",
   "Prague, Czech Republic",
 
-  // Austria
   "Graz, Austria",
   "Vienna, Austria",
 
-  // Belgium
   "Antwerp, Belgium",
   "Brussels, Belgium",
   "Ghent, Belgium",
 
-  // Romania
   "Bucharest, Romania",
   "Cluj-Napoca, Romania",
   "Timisoara, Romania",
 
-  // Hungary
   "Budapest, Hungary",
 
-  // Greece
   "Athens, Greece",
   "Thessaloniki, Greece",
 
-  // Russia
   "Moscow, Russia",
   "Novosibirsk, Russia",
   "Saint Petersburg, Russia",
 
-  // Ukraine
   "Kyiv, Ukraine",
   "Lviv, Ukraine",
 
-  // UAE
   "Abu Dhabi, United Arab Emirates",
   "Dubai, United Arab Emirates",
   "Sharjah, United Arab Emirates",
 
-  // Saudi Arabia
   "Jeddah, Saudi Arabia",
   "Riyadh, Saudi Arabia",
 
-  // Qatar
   "Doha, Qatar",
 
-  // Israel
   "Haifa, Israel",
   "Jerusalem, Israel",
   "Tel Aviv, Israel",
 
-  // Singapore
   "Singapore, Singapore",
 
-  // Japan
   "Fukuoka, Japan",
   "Nagoya, Japan",
   "Osaka, Japan",
   "Tokyo, Japan",
   "Yokohama, Japan",
 
-  // South Korea
   "Busan, South Korea",
   "Seoul, South Korea",
 
-  // China
   "Beijing, China",
   "Chengdu, China",
   "Guangzhou, China",
@@ -366,14 +325,11 @@ const LOCATION_OPTIONS = [
   "Shanghai, China",
   "Shenzhen, China",
 
-  // Hong Kong
   "Hong Kong, Hong Kong",
 
-  // Taiwan
   "Kaohsiung, Taiwan",
   "Taipei, Taiwan",
 
-  // Australia
   "Adelaide, Australia",
   "Brisbane, Australia",
   "Canberra, Australia",
@@ -381,85 +337,65 @@ const LOCATION_OPTIONS = [
   "Perth, Australia",
   "Sydney, Australia",
 
-  // New Zealand
   "Auckland, New Zealand",
   "Christchurch, New Zealand",
   "Wellington, New Zealand",
 
-  // South Africa
   "Cape Town, South Africa",
   "Durban, South Africa",
   "Johannesburg, South Africa",
   "Pretoria, South Africa",
 
-  // Brazil
   "Belo Horizonte, Brazil",
   "Brasilia, Brazil",
   "Curitiba, Brazil",
   "Rio de Janeiro, Brazil",
   "Sao Paulo, Brazil",
 
-  // Mexico
   "Guadalajara, Mexico",
   "Mexico City, Mexico",
   "Monterrey, Mexico",
 
-  // Argentina
   "Buenos Aires, Argentina",
   "Cordoba, Argentina",
   "Rosario, Argentina",
 
-  // Chile
   "Santiago, Chile",
 
-  // Colombia
   "Bogota, Colombia",
   "Medellin, Colombia",
 
-  // Egypt
   "Alexandria, Egypt",
   "Cairo, Egypt",
 
-  // Kenya
   "Nairobi, Kenya",
 
-  // Nigeria
   "Abuja, Nigeria",
   "Lagos, Nigeria",
 
-  // Turkey
   "Ankara, Turkey",
   "Istanbul, Turkey",
 
-  // Malaysia
   "Kuala Lumpur, Malaysia",
   "Penang, Malaysia",
 
-  // Thailand
   "Bangkok, Thailand",
 
-  // Indonesia
   "Jakarta, Indonesia",
 
-  // Philippines
   "Manila, Philippines",
 
-  // Vietnam
   "Hanoi, Vietnam",
   "Ho Chi Minh City, Vietnam",
 
-  // Pakistan
   "Islamabad, Pakistan",
   "Karachi, Pakistan",
   "Lahore, Pakistan",
 
-  // Bangladesh
   "Dhaka, Bangladesh",
 
-  // Sri Lanka
   "Colombo, Sri Lanka",
 
-  // Nepal
   "Kathmandu, Nepal",
 ];
 
@@ -509,6 +445,8 @@ export default function Experience() {
       ...current,
       [field]: value,
     }));
+
+    setSuccess("");
   };
 
   const openAddForm = () => {
@@ -536,11 +474,6 @@ export default function Experience() {
     setForm((current) => ({
       ...current,
       is_current: isCurrent,
-
-      /*
-       * The backend receives a valid date even when
-       * the user is currently working.
-       */
       end_date: isCurrent
         ? getToday()
         : current.end_date || getToday(),
@@ -556,13 +489,6 @@ export default function Experience() {
     setError("");
     setSuccess("");
 
-    /*
-     * Backend field remains `description`.
-     * Frontend label is `Responsibilities`.
-     *
-     * If currently working, always send today's date
-     * instead of null.
-     */
     const payload = {
       company: form.company,
       role: form.role,
@@ -658,298 +584,451 @@ export default function Experience() {
   };
 
   return (
-    <section>
+    <div className="crud-page">
       {!showForm ? (
         <>
-          <h1>Experience</h1>
+          <section className="crud-header">
+            <div>
+              <p className="crud-eyebrow">
+                CAREER HISTORY
+              </p>
 
-          <button
-            type="button"
-            onClick={openAddForm}
-          >
-            + Add Experience
-          </button>
+              <h1>Experience</h1>
 
-          {error && <p>{error}</p>}
-          {success && <p>{success}</p>}
+              <p className="crud-description">
+                Manage your professional experience and
+                career history.
+              </p>
+            </div>
 
-          <hr />
+            <div className="crud-header-action">
+              <button
+                type="button"
+                className="crud-button crud-button-primary"
+                onClick={openAddForm}
+              >
+                + Add Experience
+              </button>
+            </div>
+          </section>
 
-          {loading ? (
-            <p>Loading experiences...</p>
-          ) : experiences.length === 0 ? (
-            <p>No experience found.</p>
-          ) : (
-            <table>
-              <thead>
-                <tr>
-                  <th>Company</th>
-                  <th>Role</th>
-                  <th>Location</th>
-                  <th>Start Date</th>
-                  <th>End Date</th>
-                  <th>Currently Working</th>
-                  <th>Actions</th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {experiences.map((experience) => (
-                  <tr key={experience.id}>
-                    <td>{experience.company}</td>
-                    <td>{experience.role}</td>
-                    <td>{experience.location}</td>
-                    <td>{experience.start_date}</td>
-
-                    <td>
-                      {experience.is_current
-                        ? "Present"
-                        : experience.end_date}
-                    </td>
-
-                    <td>
-                      {experience.is_current
-                        ? "Yes"
-                        : "No"}
-                    </td>
-
-                    <td>
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleEdit(
-                            experience.id,
-                          )
-                        }
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        type="button"
-                        onClick={() =>
-                          handleDelete(
-                            experience.id,
-                          )
-                        }
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
+            >
+              {error}
+            </div>
           )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-list-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Experience list</h2>
+
+                <p>
+                  View and manage your professional
+                  experience.
+                </p>
+              </div>
+
+              <div className="crud-section-count">
+                {experiences.length}{" "}
+                {experiences.length === 1
+                  ? "position"
+                  : "positions"}
+              </div>
+            </div>
+
+            {loading ? (
+              <div className="crud-state">
+                <p>Loading experiences...</p>
+              </div>
+            ) : experiences.length === 0 ? (
+              <div className="crud-state">
+                <h3>No experience yet</h3>
+
+                <p>
+                  Add your first professional position
+                  using the button above.
+                </p>
+              </div>
+            ) : (
+              <div className="crud-table-wrapper">
+                <table className="crud-table">
+                  <thead>
+                    <tr>
+                      <th>Company</th>
+                      <th>Role</th>
+                      <th>Location</th>
+                      <th>Period</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {experiences.map((experience) => (
+                      <tr key={experience.id}>
+                        <td>
+                          <div className="crud-project-title">
+                            {experience.company}
+                          </div>
+                        </td>
+
+                        <td>
+                          <span className="crud-experience-role">
+                            {experience.role}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span className="crud-skill-category">
+                            {experience.location}
+                          </span>
+                        </td>
+
+                        <td>
+                          <div className="crud-experience-period">
+                            <span>
+                              {experience.start_date}
+                            </span>
+
+                            <span>→</span>
+
+                            <span>
+                              {experience.is_current
+                                ? "Present"
+                                : experience.end_date}
+                            </span>
+                          </div>
+                        </td>
+
+                        <td>
+                          <span
+                            className={`crud-status-badge ${
+                              experience.is_current
+                                ? "crud-status-published"
+                                : "crud-status-draft"
+                            }`}
+                          >
+                            {experience.is_current
+                              ? "Current"
+                              : "Past"}
+                          </span>
+                        </td>
+
+                        <td>
+                          <div className="crud-row-actions">
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small"
+                              onClick={() =>
+                                handleEdit(
+                                  experience.id,
+                                )
+                              }
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small crud-button-danger"
+                              onClick={() =>
+                                handleDelete(
+                                  experience.id,
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
         </>
       ) : (
         <>
-          <h1>
-            {editingId
-              ? "Edit Experience"
-              : "Add Experience"}
-          </h1>
-
-          <form onSubmit={handleSubmit}>
+          <section className="crud-header">
             <div>
-              <label htmlFor="experience-company">
-                Company
-              </label>
+              <p className="crud-eyebrow">
+                CAREER HISTORY
+              </p>
 
-              <input
-                id="experience-company"
-                type="text"
-                value={form.company}
-                onChange={(event) =>
-                  handleChange(
-                    "company",
-                    event.target.value,
-                  )
-                }
-                required
-              />
+              <h1>
+                {editingId
+                  ? "Edit Experience"
+                  : "Add Experience"}
+              </h1>
+
+              <p className="crud-description">
+                {editingId
+                  ? "Update the professional experience details below."
+                  : "Add a new professional position to your portfolio."}
+              </p>
+            </div>
+          </section>
+
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-form-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Experience details</h2>
+
+                <p>
+                  Enter the details of your professional
+                  position.
+                </p>
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="experience-role">
-                Role
-              </label>
+            <form
+              className="crud-form"
+              onSubmit={handleSubmit}
+            >
+              <div className="crud-form-grid">
+                <div className="crud-field">
+                  <label htmlFor="experience-company">
+                    Company
+                  </label>
 
-              <select
-                id="experience-role"
-                value={form.role}
-                onChange={(event) =>
-                  handleChange(
-                    "role",
-                    event.target.value,
-                  )
-                }
-                required
-              >
-                <option value="" disabled>
-                  Select role
-                </option>
+                  <input
+                    id="experience-company"
+                    type="text"
+                    value={form.company}
+                    onChange={(event) =>
+                      handleChange(
+                        "company",
+                        event.target.value,
+                      )
+                    }
+                    placeholder="Enter company name"
+                    required
+                  />
+                </div>
 
-                {ROLE_OPTIONS.map((role) => (
-                  <option key={role} value={role}>
-                    {role}
-                  </option>
-                ))}
-              </select>
-            </div>
+                <div className="crud-field">
+                  <label htmlFor="experience-role">
+                    Role
+                  </label>
 
-            <div>
-              <label htmlFor="experience-location">
-                Location
-              </label>
-
-              <select
-                id="experience-location"
-                value={form.location}
-                onChange={(event) =>
-                  handleChange(
-                    "location",
-                    event.target.value,
-                  )
-                }
-                required
-              >
-                <option value="" disabled>
-                  Select location
-                </option>
-
-                {LOCATION_OPTIONS.map(
-                  (location) => (
-                    <option
-                      key={location}
-                      value={location}
-                    >
-                      {location}
+                  <select
+                    id="experience-role"
+                    value={form.role}
+                    onChange={(event) =>
+                      handleChange(
+                        "role",
+                        event.target.value,
+                      )
+                    }
+                    required
+                  >
+                    <option value="" disabled>
+                      Select role
                     </option>
-                  ),
+
+                    {ROLE_OPTIONS.map((role) => (
+                      <option key={role} value={role}>
+                        {role}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="crud-field">
+                  <label htmlFor="experience-location">
+                    Location
+                  </label>
+
+                  <select
+                    id="experience-location"
+                    value={form.location}
+                    onChange={(event) =>
+                      handleChange(
+                        "location",
+                        event.target.value,
+                      )
+                    }
+                    required
+                  >
+                    <option value="" disabled>
+                      Select location
+                    </option>
+
+                    {LOCATION_OPTIONS.map(
+                      (location) => (
+                        <option
+                          key={location}
+                          value={location}
+                        >
+                          {location}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </div>
+
+                <div className="crud-field">
+                  <label htmlFor="experience-start-date">
+                    Start Date
+                  </label>
+
+                  <input
+                    id="experience-start-date"
+                    type="date"
+                    value={form.start_date}
+                    onChange={(event) =>
+                      handleChange(
+                        "start_date",
+                        event.target.value,
+                      )
+                    }
+                    required
+                  />
+                </div>
+
+                <div className="crud-field">
+                  <label htmlFor="experience-end-date">
+                    End Date
+                  </label>
+
+                  <input
+                    id="experience-end-date"
+                    type="date"
+                    value={form.end_date}
+                    onChange={(event) =>
+                      handleChange(
+                        "end_date",
+                        event.target.value,
+                      )
+                    }
+                    disabled={form.is_current}
+                    required={!form.is_current}
+                  />
+                </div>
+              </div>
+
+              <div className="crud-field">
+                <label htmlFor="experience-description">
+                  Responsibilities
+                </label>
+
+                <textarea
+                  id="experience-description"
+                  rows={8}
+                  value={form.description}
+                  onChange={(event) =>
+                    handleChange(
+                      "description",
+                      event.target.value,
+                    )
+                  }
+                  placeholder="Describe your responsibilities, achievements, technologies used, and contributions."
+                  required
+                />
+              </div>
+
+              <fieldset className="crud-radio-field">
+                <legend>Currently working</legend>
+
+                <div className="crud-radio-group">
+                  <label className="crud-radio-option">
+                    <input
+                      type="radio"
+                      name="currently-working"
+                      checked={!form.is_current}
+                      onChange={() =>
+                        handleCurrentlyWorkingChange(
+                          false,
+                        )
+                      }
+                    />
+
+                    <span>No</span>
+                  </label>
+
+                  <label className="crud-radio-option">
+                    <input
+                      type="radio"
+                      name="currently-working"
+                      checked={form.is_current}
+                      onChange={() =>
+                        handleCurrentlyWorkingChange(
+                          true,
+                        )
+                      }
+                    />
+
+                    <span>Yes</span>
+                  </label>
+                </div>
+
+                {form.is_current && (
+                  <p className="crud-field-help">
+                    End date is automatically set to
+                    today while this position is current.
+                  </p>
                 )}
-              </select>
-            </div>
+              </fieldset>
 
-            <div>
-              <label htmlFor="experience-description">
-                Responsibilities
-              </label>
+              <div className="crud-form-actions">
+                <button
+                  type="submit"
+                  className="crud-button crud-button-primary"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : editingId
+                      ? "Update Experience"
+                      : "Add Experience"}
+                </button>
 
-              <textarea
-                id="experience-description"
-                rows={8}
-                value={form.description}
-                onChange={(event) =>
-                  handleChange(
-                    "description",
-                    event.target.value,
-                  )
-                }
-                placeholder="Describe your responsibilities, achievements, technologies used, and contributions."
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="experience-start-date">
-                Start Date
-              </label>
-
-              <input
-                id="experience-start-date"
-                type="date"
-                value={form.start_date}
-                onChange={(event) =>
-                  handleChange(
-                    "start_date",
-                    event.target.value,
-                  )
-                }
-                required
-              />
-            </div>
-
-            <div>
-              <label htmlFor="experience-end-date">
-                End Date
-              </label>
-
-              <input
-                id="experience-end-date"
-                type="date"
-                value={form.end_date}
-                onChange={(event) =>
-                  handleChange(
-                    "end_date",
-                    event.target.value,
-                  )
-                }
-                disabled={form.is_current}
-                required={!form.is_current}
-              />
-            </div>
-
-            <fieldset>
-              <legend>
-                Currently Working
-              </legend>
-
-              <label>
-                <input
-                  type="radio"
-                  name="currently-working"
-                  checked={!form.is_current}
-                  onChange={() =>
-                    handleCurrentlyWorkingChange(
-                      false,
-                    )
-                  }
-                />
-                No
-              </label>
-
-              <label>
-                <input
-                  type="radio"
-                  name="currently-working"
-                  checked={form.is_current}
-                  onChange={() =>
-                    handleCurrentlyWorkingChange(
-                      true,
-                    )
-                  }
-                />
-                Yes
-              </label>
-            </fieldset>
-
-            <div>
-              <button
-                type="submit"
-                disabled={saving}
-              >
-                {saving
-                  ? "Saving..."
-                  : editingId
-                    ? "Update Experience"
-                    : "Add Experience"}
-              </button>
-
-              <button
-                type="button"
-                onClick={resetForm}
-                disabled={saving}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
-
-          {error && <p>{error}</p>}
-          {success && <p>{success}</p>}
+                <button
+                  type="button"
+                  className="crud-button crud-button-secondary"
+                  onClick={resetForm}
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
         </>
       )}
-    </section>
+    </div>
   );
 }

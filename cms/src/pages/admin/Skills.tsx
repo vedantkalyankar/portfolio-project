@@ -13,21 +13,7 @@ import {
   type SkillCreateRequest,
 } from "../../api/skills";
 
-const emptyForm: SkillCreateRequest = {
-  name: "",
-  category: "",
-  proficiency: "",
-};
-
-const PROFICIENCY_OPTIONS = [
-  "Beginner",
-  "Intermediate",
-  "Advanced",
-  "Expert",
-];
-
 const SKILL_NAMES = [
-  // Programming Languages
   "Python",
   "Java",
   "JavaScript",
@@ -42,252 +28,142 @@ const SKILL_NAMES = [
   "PHP",
   "Ruby",
   "Dart",
-  "R",
-  "Scala",
-  "Shell",
-  "Bash",
-  "PowerShell",
-
-  // Frontend
   "HTML",
   "CSS",
-  "Sass",
-  "Tailwind CSS",
-  "Bootstrap",
+  "SQL",
+  "Bash",
+  "Shell Scripting",
   "React",
-  "Next.js",
-  "Vue.js",
-  "Nuxt.js",
   "Angular",
-  "Svelte",
-  "Redux",
-  "React Router",
-  "Vite",
-  "Webpack",
-
-  // Backend
-  "FastAPI",
-  "Django",
-  "Flask",
-  "Django REST Framework",
+  "Vue.js",
+  "Next.js",
+  "Node.js",
   "Express.js",
-  "NestJS",
+  "Django",
+  "Django REST Framework",
+  "FastAPI",
+  "Flask",
   "Spring",
   "Spring Boot",
-  "Spring Security",
-  "Spring Data JPA",
   "Hibernate",
-  "ASP.NET Core",
+  "JPA",
+  "ASP.NET",
   "Laravel",
   "Ruby on Rails",
-
-  // APIs & Architecture
-  "REST API",
+  "Tailwind CSS",
+  "Bootstrap",
+  "Material UI",
+  "Redux",
+  "React Query",
   "GraphQL",
-  "WebSocket",
-  "gRPC",
+  "REST API",
   "Microservices",
-  "API Gateway",
-  "OAuth 2.0",
-  "OpenID Connect",
-  "JWT",
-
-  // Databases
+  "WebSockets",
   "PostgreSQL",
   "MySQL",
-  "MariaDB",
   "SQLite",
-  "Oracle",
-  "SQL Server",
   "MongoDB",
   "Redis",
+  "Oracle",
+  "SQL Server",
   "Cassandra",
-  "DynamoDB",
   "Elasticsearch",
-  "Neo4j",
+  "DynamoDB",
   "Firebase",
-
-  // Cloud
   "AWS",
-  "Amazon EC2",
-  "Amazon S3",
-  "Amazon RDS",
-  "Amazon Lambda",
-  "Amazon ECS",
-  "Amazon EKS",
-  "Amazon CloudFront",
-  "Amazon API Gateway",
-  "Google Cloud",
-  "Google Compute Engine",
-  "Google Cloud Storage",
-  "Google Cloud Run",
-  "Google Kubernetes Engine",
   "Microsoft Azure",
-  "Azure App Service",
-  "Azure Functions",
-  "Azure Kubernetes Service",
-
-  // DevOps & Containers
+  "Google Cloud Platform",
   "Docker",
-  "Docker Compose",
   "Kubernetes",
-  "Helm",
   "Jenkins",
   "GitHub Actions",
   "GitLab CI/CD",
-  "Argo CD",
   "Terraform",
   "Ansible",
-  "Prometheus",
-  "Grafana",
-  "Nginx",
-  "Apache",
-
-  // Version Control
+  "Linux",
   "Git",
   "GitHub",
   "GitLab",
   "Bitbucket",
-
-  // Testing
-  "Selenium",
-  "Playwright",
-  "Cypress",
-  "Pytest",
+  "Postman",
+  "Swagger",
+  "OpenAPI",
+  "PyTest",
   "Jest",
   "JUnit",
   "TestNG",
-  "Postman",
-  "REST Assured",
-
-  // AI / ML
+  "Selenium",
+  "Cypress",
+  "Playwright",
   "Machine Learning",
   "Deep Learning",
   "Artificial Intelligence",
   "Generative AI",
   "Natural Language Processing",
   "Computer Vision",
-  "Scikit-learn",
+  "LLM",
+  "RAG",
+  "LangChain",
+  "LlamaIndex",
+  "OpenAI API",
+  "Hugging Face",
   "TensorFlow",
   "PyTorch",
-  "Keras",
+  "Scikit-learn",
   "Pandas",
   "NumPy",
   "Matplotlib",
-  "OpenCV",
-  "Hugging Face",
-  "LangChain",
-  "LangGraph",
-  "LlamaIndex",
-  "RAG",
-  "Vector Databases",
-  "FAISS",
-  "ChromaDB",
-  "Pinecone",
-  "OpenAI API",
-
-  // Data Engineering
+  "Seaborn",
   "Apache Spark",
-  "Apache Kafka",
-  "Apache Airflow",
-  "Databricks",
-  "ETL",
-  "Data Warehousing",
-  "Apache Flink",
-
-  // Messaging & Distributed Systems
+  "Kafka",
   "RabbitMQ",
-  "Apache Kafka",
   "Celery",
-  "Amazon SQS",
-  "Apache ActiveMQ",
-
-  // Tools
-  "Linux",
-  "Windows",
-  "VS Code",
-  "IntelliJ IDEA",
-  "PyCharm",
-  "Jupyter",
-  "Swagger",
-  "OpenAPI",
-  "SonarQube",
-  "Maven",
-  "Gradle",
-  "npm",
-  "Yarn",
-  "pnpm",
 ];
-
 
 const SKILL_CATEGORIES = [
-  "Programming Languages",
-  "Frontend Development",
-  "Backend Development",
-  "Full Stack Development",
-  "Mobile Development",
-  "Web Development",
-  "API Development",
-  "API & Integration",
-  "Software Architecture",
-  "Microservices",
+  "Programming Language",
+  "Frontend",
+  "Backend",
   "Database",
-  "Relational Database",
-  "NoSQL Database",
-  "Caching",
-  "Cloud Computing",
-  "AWS",
-  "Microsoft Azure",
-  "Google Cloud Platform",
+  "Cloud",
   "DevOps",
-  "CI/CD",
-  "Containerization",
-  "Kubernetes",
-  "Infrastructure as Code",
-  "Monitoring & Observability",
-  "Networking",
-  "Security",
-  "Authentication & Authorization",
   "Testing",
-  "Test Automation",
-  "Performance Testing",
-  "Artificial Intelligence",
-  "Machine Learning",
-  "Deep Learning",
-  "Generative AI",
-  "Natural Language Processing",
-  "Computer Vision",
-  "Large Language Models",
-  "RAG",
-  "AI Agents",
-  "Vector Databases",
-  "Data Science",
-  "Data Analysis",
-  "Data Engineering",
-  "Big Data",
-  "Data Visualization",
-  "Message Queues",
-  "Distributed Systems",
-  "Version Control",
-  "Build Tools",
-  "Package Management",
-  "Linux",
-  "System Administration",
-  "Developer Tools",
-  "Project Management",
+  "AI / ML",
+  "Data",
+  "Tools",
   "Other",
 ];
+
+const PROFICIENCY_OPTIONS = [
+  "Beginner",
+  "Intermediate",
+  "Advanced",
+  "Expert",
+];
+
+const EMPTY_FORM: SkillCreateRequest = {
+  name: "",
+  category: "",
+  proficiency: "",
+};
+
 export default function Skills() {
   const [skills, setSkills] = useState<Skill[]>([]);
+
   const [form, setForm] =
-    useState<SkillCreateRequest>(emptyForm);
+    useState<SkillCreateRequest>(EMPTY_FORM);
 
   const [editingId, setEditingId] = useState<string | null>(
     null,
   );
 
   const [page, setPage] = useState(1);
+  const [pageSize] = useState(10);
+
+  const [total, setTotal] = useState(0);
   const [totalPages, setTotalPages] = useState(1);
+
+  const [showForm, setShowForm] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
@@ -295,16 +171,18 @@ export default function Skills() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
-  const pageSize = 10;
-
   const loadSkills = async () => {
     try {
       setLoading(true);
       setError("");
 
-      const response = await getSkills(page, pageSize);
+      const response = await getSkills(
+        page,
+        pageSize,
+      );
 
       setSkills(response.items);
+      setTotal(response.total);
       setTotalPages(response.total_pages);
     } catch {
       setError("Failed to load skills.");
@@ -315,18 +193,34 @@ export default function Skills() {
 
   useEffect(() => {
     loadSkills();
-  }, [page]);
+  }, [page, pageSize]);
 
-const handleChange = (
-  field: keyof SkillCreateRequest,
-  value: string,
-) => {
+  const handleChange = (
+    field: keyof SkillCreateRequest,
+    value: string,
+  ) => {
     setForm((current) => ({
       ...current,
       [field]: value,
     }));
 
     setSuccess("");
+  };
+
+  const openAddForm = () => {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setError("");
+    setSuccess("");
+    setShowForm(true);
+  };
+
+  const cancelForm = () => {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setError("");
+    setSuccess("");
+    setShowForm(false);
   };
 
   const handleSubmit = async (
@@ -341,14 +235,21 @@ const handleChange = (
 
       if (editingId) {
         await updateSkill(editingId, form);
-        setSuccess("Skill updated successfully.");
+
+        setSuccess(
+          "Skill updated successfully.",
+        );
       } else {
         await createSkill(form);
-        setSuccess("Skill created successfully.");
+
+        setSuccess(
+          "Skill created successfully.",
+        );
       }
 
-      setForm(emptyForm);
+      setForm(EMPTY_FORM);
       setEditingId(null);
+      setShowForm(false);
 
       await loadSkills();
     } catch {
@@ -363,17 +264,17 @@ const handleChange = (
   };
 
   const handleEdit = (skill: Skill) => {
-    setEditingId(skill.id);
+  setForm({
+    name: skill.name,
+    category: skill.category,
+    proficiency: skill.proficiency,
+  });
 
-    setForm({
-      name: skill.name,
-      category: skill.category,
-      proficiency: skill.proficiency,
-    });
-
-    setError("");
-    setSuccess("");
-  };
+  setEditingId(skill.id);
+  setError("");
+  setSuccess("");
+  setShowForm(true);
+};
 
   const handleDelete = async (id: string) => {
     const confirmed = window.confirm(
@@ -390,10 +291,14 @@ const handleChange = (
 
       await deleteSkill(id);
 
-      setSuccess("Skill deleted successfully.");
+      setSuccess(
+        "Skill deleted successfully.",
+      );
 
       if (skills.length === 1 && page > 1) {
-        setPage((current) => current - 1);
+        setPage((current) =>
+          Math.max(1, current - 1),
+        );
       } else {
         await loadSkills();
       }
@@ -402,197 +307,371 @@ const handleChange = (
     }
   };
 
-  const cancelEdit = () => {
-    setEditingId(null);
-    setForm(emptyForm);
-    setError("");
-    setSuccess("");
-  };
-
   return (
-    <div>
-      <h1>Skills</h1>
+    <div className="crud-page">
+      {!showForm ? (
+        <>
+          <section className="crud-header">
+            <div>
+              <p className="crud-eyebrow">
+                TECHNICAL PROFILE
+              </p>
 
-      {error && <p>{error}</p>}
-      {success && <p>{success}</p>}
+              <h1>Skills</h1>
 
-      <section>
-        <h2>{editingId ? "Edit Skill" : "Add Skill"}</h2>
+              <p className="crud-description">
+                Manage the technical skills displayed on
+                your portfolio.
+              </p>
+            </div>
 
-        <form onSubmit={handleSubmit}>
-          <div>
-  <label htmlFor="skill-name">
-    Name
-  </label>
+            <div className="crud-header-action">
+              <button
+                type="button"
+                className="crud-button crud-button-primary"
+                onClick={openAddForm}
+              >
+                + Add Skill
+              </button>
+            </div>
+          </section>
 
-  <select
-    id="skill-name"
-    value={form.name}
-    onChange={(event) =>
-      handleChange("name", event.target.value)
-    }
-    required
-  >
-    <option value="" disabled>
-      Select skill
-    </option>
-
-    {SKILL_NAMES.map((name) => (
-      <option key={name} value={name}>
-        {name}
-      </option>
-    ))}
-  </select>
-</div>
-
-          <div>
-  <label htmlFor="skill-category">
-    Category
-  </label>
-
-  <select
-    id="skill-category"
-    value={form.category}
-    onChange={(event) =>
-      handleChange("category", event.target.value)
-    }
-    required
-  >
-    <option value="" disabled>
-      Select category
-    </option>
-
-    {SKILL_CATEGORIES.map((category) => (
-      <option key={category} value={category}>
-        {category}
-      </option>
-    ))}
-  </select>
-</div>
-
-      <div>
-  <label htmlFor="skill-proficiency">
-    Proficiency
-  </label>
-
-  <select
-    id="skill-proficiency"
-    value={form.proficiency}
-    onChange={(event) =>
-      handleChange(
-        "proficiency",
-        event.target.value,
-      )
-    }
-    required
-  >
-    <option value="" disabled>
-      Select proficiency
-    </option>
-
-    {PROFICIENCY_OPTIONS.map((level) => (
-      <option key={level} value={level}>
-        {level}
-      </option>
-    ))}
-  </select>
-</div>
-
-          <button type="submit" disabled={saving}>
-            {saving
-              ? "Saving..."
-              : editingId
-                ? "Update Skill"
-                : "Add Skill"}
-          </button>
-
-          {editingId && (
-            <button
-              type="button"
-              onClick={cancelEdit}
-              disabled={saving}
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
             >
-              Cancel
-            </button>
+              {error}
+            </div>
           )}
-        </form>
-      </section>
 
-      <section>
-        <h2>Skill List</h2>
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
 
-        {loading ? (
-          <p>Loading skills...</p>
-        ) : skills.length === 0 ? (
-          <p>No skills found.</p>
-        ) : (
-          <table>
-            <thead>
-              <tr>
-                <th>Name</th>
-                <th>Category</th>
-                <th>Proficiency</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
+          <section className="crud-list-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Skill list</h2>
 
-            <tbody>
-              {skills.map((skill) => (
-                <tr key={skill.id}>
-                  <td>{skill.name}</td>
-                  <td>{skill.category}</td>
-                  <td>{skill.proficiency}%</td>
+                <p>
+                  View and manage your technical skills
+                  and proficiency levels.
+                </p>
+              </div>
 
-                  <td>
-                    <button
-                      type="button"
-                      onClick={() => handleEdit(skill)}
-                    >
-                      Edit
-                    </button>
+              <div className="crud-section-count">
+                {total}{" "}
+                {total === 1
+                  ? "skill"
+                  : "skills"}
+              </div>
+            </div>
 
-                    <button
-                      type="button"
-                      onClick={() =>
-                        handleDelete(skill.id)
-                      }
-                    >
-                      Delete
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        )}
-      </section>
+            {loading ? (
+              <div className="crud-state">
+                <p>Loading skills...</p>
+              </div>
+            ) : skills.length === 0 ? (
+              <div className="crud-state">
+                <h3>No skills yet</h3>
 
-      {totalPages > 1 && (
-        <div>
-          <button
-            type="button"
-            disabled={page === 1}
-            onClick={() =>
-              setPage((current) => current - 1)
-            }
-          >
-            Previous
-          </button>
+                <p>
+                  Add your first skill using the button
+                  above.
+                </p>
+              </div>
+            ) : (
+              <div className="crud-table-wrapper">
+                <table className="crud-table">
+                  <thead>
+                    <tr>
+                      <th>Skill</th>
+                      <th>Category</th>
+                      <th>Proficiency</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
 
-          <span>
-            Page {page} of {totalPages}
-          </span>
+                  <tbody>
+                    {skills.map((skill) => (
+                      <tr key={skill.id}>
+                        <td>
+                          <div className="crud-project-title">
+                            {skill.name}
+                          </div>
+                        </td>
 
-          <button
-            type="button"
-            disabled={page === totalPages}
-            onClick={() =>
-              setPage((current) => current + 1)
-            }
-          >
-            Next
-          </button>
-        </div>
+                        <td>
+                          <span className="crud-skill-category">
+                            {skill.category}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span className="crud-skill-proficiency">
+                            {skill.proficiency}
+                          </span>
+                        </td>
+
+                        <td>
+                          <div className="crud-row-actions">
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small"
+                              onClick={() =>
+                                handleEdit(
+                                  skill
+                                )
+                              }
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small crud-button-danger"
+                              onClick={() =>
+                                handleDelete(
+                                  skill.id,
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+
+          {totalPages > 1 && (
+            <div className="crud-pagination">
+              <button
+                type="button"
+                className="crud-button crud-button-secondary"
+                disabled={page <= 1}
+                onClick={() =>
+                  setPage((current) =>
+                    Math.max(1, current - 1),
+                  )
+                }
+              >
+                ← Previous
+              </button>
+
+              <span>
+                Page <strong>{page}</strong> of{" "}
+                <strong>{totalPages}</strong>
+              </span>
+
+              <button
+                type="button"
+                className="crud-button crud-button-secondary"
+                disabled={page >= totalPages}
+                onClick={() =>
+                  setPage((current) =>
+                    Math.min(
+                      totalPages,
+                      current + 1,
+                    ),
+                  )
+                }
+              >
+                Next →
+              </button>
+            </div>
+          )}
+        </>
+      ) : (
+        <>
+          <section className="crud-header">
+            <div>
+              <p className="crud-eyebrow">
+                TECHNICAL PROFILE
+              </p>
+
+              <h1>
+                {editingId
+                  ? "Edit Skill"
+                  : "Add Skill"}
+              </h1>
+
+              <p className="crud-description">
+                {editingId
+                  ? "Update the skill information below."
+                  : "Add a new technical skill to your portfolio."}
+              </p>
+            </div>
+          </section>
+
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-form-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Skill details</h2>
+
+                <p>
+                  Enter the details of your technical
+                  skill.
+                </p>
+              </div>
+            </div>
+
+            <form
+              className="crud-form"
+              onSubmit={handleSubmit}
+            >
+              <div className="crud-form-grid">
+                <div className="crud-field">
+                  <label htmlFor="skill-name">
+                    Skill
+                  </label>
+
+                  <select
+                    id="skill-name"
+                    value={form.name}
+                    onChange={(event) =>
+                      handleChange(
+                        "name",
+                        event.target.value,
+                      )
+                    }
+                    required
+                  >
+                    <option value="" disabled>
+                      Select skill
+                    </option>
+
+                    {SKILL_NAMES.map((skill) => (
+                      <option
+                        key={skill}
+                        value={skill}
+                      >
+                        {skill}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                <div className="crud-field">
+                  <label htmlFor="skill-category">
+                    Category
+                  </label>
+
+                  <select
+                    id="skill-category"
+                    value={form.category}
+                    onChange={(event) =>
+                      handleChange(
+                        "category",
+                        event.target.value,
+                      )
+                    }
+                    required
+                  >
+                    <option value="" disabled>
+                      Select category
+                    </option>
+
+                    {SKILL_CATEGORIES.map(
+                      (category) => (
+                        <option
+                          key={category}
+                          value={category}
+                        >
+                          {category}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </div>
+
+                <div className="crud-field">
+                  <label htmlFor="skill-proficiency">
+                    Proficiency
+                  </label>
+
+                  <select
+                    id="skill-proficiency"
+                    value={form.proficiency}
+                    onChange={(event) =>
+                      handleChange(
+                        "proficiency",
+                        event.target.value,
+                      )
+                    }
+                    required
+                  >
+                    <option value="" disabled>
+                      Select proficiency
+                    </option>
+
+                    {PROFICIENCY_OPTIONS.map(
+                      (proficiency) => (
+                        <option
+                          key={proficiency}
+                          value={proficiency}
+                        >
+                          {proficiency}
+                        </option>
+                      ),
+                    )}
+                  </select>
+                </div>
+              </div>
+
+              <div className="crud-form-actions">
+                <button
+                  type="submit"
+                  className="crud-button crud-button-primary"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : editingId
+                      ? "Update Skill"
+                      : "Add Skill"}
+                </button>
+
+                <button
+                  type="button"
+                  className="crud-button crud-button-secondary"
+                  onClick={cancelForm}
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
+        </>
       )}
     </div>
   );

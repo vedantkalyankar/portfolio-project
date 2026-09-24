@@ -1,4 +1,8 @@
-import { useEffect, useState, type FormEvent } from "react";
+import {
+  useEffect,
+  useState,
+  type FormEvent,
+} from "react";
 
 import {
   createBlog,
@@ -7,17 +11,10 @@ import {
   getBlogs,
   updateBlog,
   type Blog,
+  type BlogCreateRequest,
 } from "../../api/blogs";
 
-interface BlogForm {
-  title: string;
-  slug: string;
-  excerpt: string;
-  content: string;
-  published: boolean;
-}
-
-const EMPTY_FORM: BlogForm = {
+const EMPTY_FORM: BlogCreateRequest = {
   title: "",
   slug: "",
   excerpt: "",
@@ -27,23 +24,32 @@ const EMPTY_FORM: BlogForm = {
 
 export default function Blogs() {
   const [blogs, setBlogs] = useState<Blog[]>([]);
-  const [form, setForm] = useState<BlogForm>(EMPTY_FORM);
-  const [editingId, setEditingId] = useState<string | null>(null);
+
+  const [form, setForm] =
+    useState<BlogCreateRequest>(EMPTY_FORM);
+
+  const [editingId, setEditingId] = useState<string | null>(
+    null,
+  );
+
+  const [showForm, setShowForm] = useState(false);
 
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const loadBlogs = async () => {
-    setLoading(true);
-    setError("");
-
     try {
+      setLoading(true);
+      setError("");
+
       const data = await getBlogs();
+
       setBlogs(data);
     } catch {
-      setError("Failed to load blogs.");
+      setError("Failed to load blog posts.");
     } finally {
       setLoading(false);
     }
@@ -54,18 +60,31 @@ export default function Blogs() {
   }, []);
 
   const handleChange = (
-    field: keyof BlogForm,
+    field: keyof BlogCreateRequest,
     value: string | boolean,
   ) => {
     setForm((current) => ({
       ...current,
       [field]: value,
     }));
+
+    setSuccess("");
   };
 
-  const resetForm = () => {
+  const openAddForm = () => {
     setForm(EMPTY_FORM);
     setEditingId(null);
+    setError("");
+    setSuccess("");
+    setShowForm(true);
+  };
+
+  const cancelForm = () => {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setError("");
+    setSuccess("");
+    setShowForm(false);
   };
 
   const handleSubmit = async (
@@ -73,26 +92,35 @@ export default function Blogs() {
   ) => {
     event.preventDefault();
 
-    setSaving(true);
-    setError("");
-    setSuccess("");
-
     try {
+      setSaving(true);
+      setError("");
+      setSuccess("");
+
       if (editingId) {
         await updateBlog(editingId, form);
-        setSuccess("Blog updated successfully.");
+
+        setSuccess(
+          "Blog post updated successfully.",
+        );
       } else {
         await createBlog(form);
-        setSuccess("Blog created successfully.");
+
+        setSuccess(
+          "Blog post created successfully.",
+        );
       }
 
-      resetForm();
+      setForm(EMPTY_FORM);
+      setEditingId(null);
+      setShowForm(false);
+
       await loadBlogs();
     } catch {
       setError(
         editingId
-          ? "Failed to update blog."
-          : "Failed to create blog.",
+          ? "Failed to update blog post."
+          : "Failed to create blog post.",
       );
     } finally {
       setSaving(false);
@@ -115,190 +143,407 @@ export default function Blogs() {
       });
 
       setEditingId(blog.id);
+      setShowForm(true);
     } catch {
-      setError("Failed to load blog.");
+      setError("Failed to load blog post.");
     }
   };
 
   const handleDelete = async (id: string) => {
     const confirmed = window.confirm(
-      "Are you sure you want to delete this blog?",
+      "Are you sure you want to delete this blog post?",
     );
 
     if (!confirmed) {
       return;
     }
 
-    setError("");
-    setSuccess("");
-
     try {
+      setError("");
+      setSuccess("");
+
       await deleteBlog(id);
 
-      if (editingId === id) {
-        resetForm();
-      }
+      setSuccess(
+        "Blog post deleted successfully.",
+      );
 
-      setSuccess("Blog deleted successfully.");
-      await loadBlogs();
+      if (editingId === id) {
+        cancelForm();
+      } else {
+        await loadBlogs();
+      }
     } catch {
-      setError("Failed to delete blog.");
+      setError("Failed to delete blog post.");
     }
   };
 
   return (
-    <section>
-      <h1>{editingId ? "Edit Blog" : "Add Blog"}</h1>
+    <div className="crud-page">
+      {!showForm ? (
+        <>
+          <section className="crud-header">
+            <div>
+              <p className="crud-eyebrow">
+                PORTFOLIO CONTENT
+              </p>
 
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="blog-title">Title</label>
-          <input
-            id="blog-title"
-            type="text"
-            value={form.title}
-            onChange={(event) =>
-              handleChange("title", event.target.value)
-            }
-            required
-          />
-        </div>
+              <h1>Blogs</h1>
 
-        <div>
-          <label htmlFor="blog-slug">Slug</label>
-          <input
-            id="blog-slug"
-            type="text"
-            value={form.slug}
-            onChange={(event) =>
-              handleChange("slug", event.target.value)
-            }
-            required
-          />
-        </div>
+              <p className="crud-description">
+                Manage the articles and blog posts
+                published on your portfolio.
+              </p>
+            </div>
 
-        <div>
-          <label htmlFor="blog-excerpt">Excerpt</label>
-          <textarea
-            id="blog-excerpt"
-            value={form.excerpt}
-            onChange={(event) =>
-              handleChange("excerpt", event.target.value)
-            }
-            required
-          />
-        </div>
+            <div className="crud-header-action">
+              <button
+                type="button"
+                className="crud-button crud-button-primary"
+                onClick={openAddForm}
+              >
+                + Add Blog
+              </button>
+            </div>
+          </section>
 
-        <div>
-          <label htmlFor="blog-content">Content</label>
-          <textarea
-            id="blog-content"
-            rows={10}
-            value={form.content}
-            onChange={(event) =>
-              handleChange("content", event.target.value)
-            }
-            required
-          />
-        </div>
-
-        <div>
-          <label htmlFor="blog-published">Published</label>
-
-          <select
-            id="blog-published"
-            value={form.published ? "true" : "false"}
-            onChange={(event) =>
-              handleChange(
-                "published",
-                event.target.value === "true",
-              )
-            }
-          >
-            <option value="false">Draft</option>
-            <option value="true">Published</option>
-          </select>
-        </div>
-
-        <div>
-          <button type="submit" disabled={saving}>
-            {saving
-              ? "Saving..."
-              : editingId
-                ? "Update Blog"
-                : "Add Blog"}
-          </button>
-
-          {editingId && (
-            <button
-              type="button"
-              onClick={resetForm}
-              disabled={saving}
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
             >
-              Cancel
-            </button>
+              {error}
+            </div>
           )}
-        </div>
-      </form>
 
-      {error && <p>{error}</p>}
-      {success && <p>{success}</p>}
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
 
-      <hr />
+          <section className="crud-list-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Blog list</h2>
 
-      <h2>Blogs</h2>
+                <p>
+                  View and manage your existing blog
+                  posts.
+                </p>
+              </div>
 
-      {loading ? (
-        <p>Loading blogs...</p>
-      ) : blogs.length === 0 ? (
-        <p>No blogs found.</p>
+              <div className="crud-section-count">
+                {blogs.length}{" "}
+                {blogs.length === 1
+                  ? "post"
+                  : "posts"}
+              </div>
+            </div>
+
+            {loading ? (
+              <div className="crud-state">
+                <p>Loading blog posts...</p>
+              </div>
+            ) : blogs.length === 0 ? (
+              <div className="crud-state">
+                <h3>No blog posts yet</h3>
+
+                <p>
+                  Add your first blog post using the
+                  button above.
+                </p>
+              </div>
+            ) : (
+              <div className="crud-table-wrapper">
+                <table className="crud-table">
+                  <thead>
+                    <tr>
+                      <th>Title</th>
+                      <th>Slug</th>
+                      <th>Status</th>
+                      <th>Created</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {blogs.map((blog) => (
+                      <tr key={blog.id}>
+                        <td>
+                          <div className="crud-project-title">
+                            {blog.title}
+                          </div>
+                        </td>
+
+                        <td>
+                          <span className="crud-blog-slug">
+                            /{blog.slug}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span
+                            className={`crud-status-badge ${
+                              blog.published
+                                ? "crud-status-published"
+                                : "crud-status-draft"
+                            }`}
+                          >
+                            {blog.published
+                              ? "Published"
+                              : "Draft"}
+                          </span>
+                        </td>
+
+                        <td>
+                          <span className="crud-blog-date">
+                            {new Date(
+                              blog.created_at,
+                            ).toLocaleDateString()}
+                          </span>
+                        </td>
+
+                        <td>
+                          <div className="crud-row-actions">
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small"
+                              onClick={() =>
+                                handleEdit(
+                                  blog.id,
+                                )
+                              }
+                            >
+                              Edit
+                            </button>
+
+                            <button
+                              type="button"
+                              className="crud-button crud-button-small crud-button-danger"
+                              onClick={() =>
+                                handleDelete(
+                                  blog.id,
+                                )
+                              }
+                            >
+                              Delete
+                            </button>
+                          </div>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
+        </>
       ) : (
-        <table>
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Slug</th>
-              <th>Published</th>
-              <th>Created</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+        <>
+          <section className="crud-header">
+            <div>
+              <p className="crud-eyebrow">
+                PORTFOLIO CONTENT
+              </p>
 
-          <tbody>
-            {blogs.map((blog) => (
-              <tr key={blog.id}>
-                <td>{blog.title}</td>
-                <td>{blog.slug}</td>
-                <td>
-                  {blog.published ? "Published" : "Draft"}
-                </td>
-                <td>
-                  {new Date(
-                    blog.created_at,
-                  ).toLocaleDateString()}
-                </td>
-                <td>
-                  <button
-                    type="button"
-                    onClick={() => handleEdit(blog.id)}
-                  >
-                    Edit
-                  </button>
+              <h1>
+                {editingId
+                  ? "Edit Blog"
+                  : "Add Blog"}
+              </h1>
 
-                  <button
-                    type="button"
-                    onClick={() =>
-                      handleDelete(blog.id)
+              <p className="crud-description">
+                {editingId
+                  ? "Update the blog post information below."
+                  : "Create a new article for your portfolio."}
+              </p>
+            </div>
+          </section>
+
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-form-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Blog details</h2>
+
+                <p>
+                  Enter the content and publishing
+                  information for your blog post.
+                </p>
+              </div>
+            </div>
+
+            <form
+              className="crud-form"
+              onSubmit={handleSubmit}
+            >
+              <div className="crud-form-grid">
+                <div className="crud-field">
+                  <label htmlFor="blog-title">
+                    Title
+                  </label>
+
+                  <input
+                    id="blog-title"
+                    type="text"
+                    value={form.title}
+                    onChange={(event) =>
+                      handleChange(
+                        "title",
+                        event.target.value,
+                      )
                     }
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                    placeholder="Enter blog title"
+                    required
+                  />
+                </div>
+
+                <div className="crud-field">
+                  <label htmlFor="blog-slug">
+                    Slug
+                  </label>
+
+                  <input
+                    id="blog-slug"
+                    type="text"
+                    value={form.slug}
+                    onChange={(event) =>
+                      handleChange(
+                        "slug",
+                        event.target.value,
+                      )
+                    }
+                    placeholder="my-blog-post"
+                    required
+                  />
+                </div>
+              </div>
+
+              <div className="crud-field">
+                <label htmlFor="blog-excerpt">
+                  Excerpt
+                </label>
+
+                <textarea
+                  id="blog-excerpt"
+                  rows={4}
+                  value={form.excerpt}
+                  onChange={(event) =>
+                    handleChange(
+                      "excerpt",
+                      event.target.value,
+                    )
+                  }
+                  placeholder="Write a short summary of the blog post."
+                  required
+                />
+              </div>
+
+              <div className="crud-field">
+                <label htmlFor="blog-content">
+                  Content
+                </label>
+
+                <textarea
+                  id="blog-content"
+                  rows={12}
+                  value={form.content}
+                  onChange={(event) =>
+                    handleChange(
+                      "content",
+                      event.target.value,
+                    )
+                  }
+                  placeholder="Write the full blog content here."
+                  required
+                />
+              </div>
+
+              <fieldset className="crud-radio-field">
+                <legend>Publishing status</legend>
+
+                <div className="crud-radio-group">
+                  <label className="crud-radio-option">
+                    <input
+                      type="radio"
+                      name="blog-published"
+                      checked={!form.published}
+                      onChange={() =>
+                        handleChange(
+                          "published",
+                          false,
+                        )
+                      }
+                    />
+
+                    <span>Draft</span>
+                  </label>
+
+                  <label className="crud-radio-option">
+                    <input
+                      type="radio"
+                      name="blog-published"
+                      checked={form.published}
+                      onChange={() =>
+                        handleChange(
+                          "published",
+                          true,
+                        )
+                      }
+                    />
+
+                    <span>Published</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <div className="crud-form-actions">
+                <button
+                  type="submit"
+                  className="crud-button crud-button-primary"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : editingId
+                      ? "Update Blog"
+                      : "Add Blog"}
+                </button>
+
+                <button
+                  type="button"
+                  className="crud-button crud-button-secondary"
+                  onClick={cancelForm}
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
+        </>
       )}
-    </section>
+    </div>
   );
 }

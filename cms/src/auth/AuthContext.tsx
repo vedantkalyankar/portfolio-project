@@ -10,6 +10,7 @@ import { login as loginApi } from "../api/auth";
 
 interface AuthContextType {
   token: string | null;
+  username: string | null;
   isAuthenticated: boolean;
   login: (username: string, password: string) => Promise<void>;
   logout: () => void;
@@ -30,6 +31,10 @@ export function AuthProvider({
     return localStorage.getItem("access_token");
   });
 
+  const [username, setUsername] = useState<string | null>(() => {
+    return localStorage.getItem("admin_username");
+  });
+
   useEffect(() => {
     if (token) {
       localStorage.setItem("access_token", token);
@@ -37,6 +42,14 @@ export function AuthProvider({
       localStorage.removeItem("access_token");
     }
   }, [token]);
+
+  useEffect(() => {
+    if (username) {
+      localStorage.setItem("admin_username", username);
+    } else {
+      localStorage.removeItem("admin_username");
+    }
+  }, [username]);
 
   const login = async (
     username: string,
@@ -48,16 +61,19 @@ export function AuthProvider({
     });
 
     setToken(response.access_token);
+    setUsername(username);
   };
 
   const logout = () => {
     setToken(null);
+    setUsername(null);
   };
 
   return (
     <AuthContext.Provider
       value={{
         token,
+        username,
         isAuthenticated: Boolean(token),
         login,
         logout,

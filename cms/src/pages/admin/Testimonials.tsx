@@ -28,9 +28,9 @@ const EMPTY_FORM: TestimonialForm = {
 };
 
 export default function Testimonials() {
-  const [testimonials, setTestimonials] = useState<Testimonial[]>(
-    [],
-  );
+  const [testimonials, setTestimonials] = useState<
+    Testimonial[]
+  >([]);
 
   const [form, setForm] =
     useState<TestimonialForm>(EMPTY_FORM);
@@ -42,15 +42,17 @@ export default function Testimonials() {
   const [showForm, setShowForm] = useState(false);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   const loadTestimonials = async () => {
-    setLoading(true);
-    setError("");
-
     try {
+      setLoading(true);
+      setError("");
+
       const data = await getTestimonials();
+
       setTestimonials(data);
     } catch {
       setError("Failed to load testimonials.");
@@ -71,14 +73,24 @@ export default function Testimonials() {
       ...current,
       [field]: value,
     }));
+
+    setSuccess("");
   };
 
-  const handleAdd = () => {
-    setEditingId(null);
+  const openAddForm = () => {
     setForm(EMPTY_FORM);
+    setEditingId(null);
     setError("");
     setSuccess("");
     setShowForm(true);
+  };
+
+  const cancelForm = () => {
+    setForm(EMPTY_FORM);
+    setEditingId(null);
+    setError("");
+    setSuccess("");
+    setShowForm(false);
   };
 
   const handleEdit = async (id: string) => {
@@ -95,19 +107,11 @@ export default function Testimonials() {
         content: testimonial.content,
       });
 
-      setEditingId(id);
+      setEditingId(testimonial.id);
       setShowForm(true);
     } catch {
       setError("Failed to load testimonial.");
     }
-  };
-
-  const handleCancel = () => {
-    setShowForm(false);
-    setEditingId(null);
-    setForm(EMPTY_FORM);
-    setError("");
-    setSuccess("");
   };
 
   const handleSubmit = async (
@@ -115,17 +119,23 @@ export default function Testimonials() {
   ) => {
     event.preventDefault();
 
-    setSaving(true);
-    setError("");
-    setSuccess("");
-
     try {
+      setSaving(true);
+      setError("");
+      setSuccess("");
+
       if (editingId) {
         await updateTestimonial(editingId, form);
-        setSuccess("Testimonial updated successfully.");
+
+        setSuccess(
+          "Testimonial updated successfully.",
+        );
       } else {
         await createTestimonial(form);
-        setSuccess("Testimonial created successfully.");
+
+        setSuccess(
+          "Testimonial created successfully.",
+        );
       }
 
       setForm(EMPTY_FORM);
@@ -159,7 +169,10 @@ export default function Testimonials() {
     try {
       await deleteTestimonial(id);
 
-      setSuccess("Testimonial deleted successfully.");
+      setSuccess(
+        "Testimonial deleted successfully.",
+      );
+
       await loadTestimonials();
     } catch {
       setError("Failed to delete testimonial.");
@@ -167,270 +180,325 @@ export default function Testimonials() {
   };
 
   return (
-    <section>
+    <div className="crud-page">
       {!showForm ? (
         <>
-          <div
-            style={{
-              display: "flex",
-              justifyContent: "space-between",
-              alignItems: "center",
-              marginBottom: "20px",
-            }}
-          >
-            <h1>Testimonials</h1>
+          <section className="crud-header">
+            <div>
+              <p className="crud-eyebrow">
+                SOCIAL PROOF
+              </p>
 
-            <button onClick={handleAdd}>
-              + Add Testimonial
-            </button>
-          </div>
+              <h1>Testimonials</h1>
 
-          {loading && <p>Loading testimonials...</p>}
+              <p className="crud-description">
+                Manage the testimonials displayed on your
+                portfolio.
+              </p>
+            </div>
 
-          {error && <p>{error}</p>}
-          {success && <p>{success}</p>}
+            <div className="crud-header-action">
+              <button
+                type="button"
+                className="crud-button crud-button-primary"
+                onClick={openAddForm}
+              >
+                + Add Testimonial
+              </button>
+            </div>
+          </section>
 
-          {!loading && testimonials.length === 0 && (
-            <p>No testimonials found.</p>
-          )}
-
-          {!loading && testimonials.length > 0 && (
-            <table
-              style={{
-                width: "100%",
-                borderCollapse: "collapse",
-              }}
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
             >
-              <thead>
-                <tr>
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Name
-                  </th>
-
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Role
-                  </th>
-
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Company
-                  </th>
-
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Content
-                  </th>
-
-                  <th
-                    style={{
-                      textAlign: "left",
-                      padding: "10px",
-                      borderBottom: "1px solid #ddd",
-                    }}
-                  >
-                    Actions
-                  </th>
-                </tr>
-              </thead>
-
-              <tbody>
-                {testimonials.map((testimonial) => (
-                  <tr key={testimonial.id}>
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                      }}
-                    >
-                      {testimonial.name}
-                    </td>
-
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                      }}
-                    >
-                      {testimonial.role}
-                    </td>
-
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                      }}
-                    >
-                      {testimonial.company}
-                    </td>
-
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                        maxWidth: "400px",
-                      }}
-                    >
-                      {testimonial.content}
-                    </td>
-
-                    <td
-                      style={{
-                        padding: "10px",
-                        borderBottom: "1px solid #eee",
-                        whiteSpace: "nowrap",
-                      }}
-                    >
-                      <button
-                        onClick={() =>
-                          handleEdit(testimonial.id)
-                        }
-                        style={{ marginRight: "8px" }}
-                      >
-                        Edit
-                      </button>
-
-                      <button
-                        onClick={() =>
-                          handleDelete(testimonial.id)
-                        }
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+              {error}
+            </div>
           )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-list-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Testimonial list</h2>
+
+                <p>
+                  View and manage feedback from clients,
+                  colleagues, and collaborators.
+                </p>
+              </div>
+
+              <div className="crud-section-count">
+                {testimonials.length}{" "}
+                {testimonials.length === 1
+                  ? "testimonial"
+                  : "testimonials"}
+              </div>
+            </div>
+
+            {loading ? (
+              <div className="crud-state">
+                <p>Loading testimonials...</p>
+              </div>
+            ) : testimonials.length === 0 ? (
+              <div className="crud-state">
+                <h3>No testimonials yet</h3>
+
+                <p>
+                  Add your first testimonial using the
+                  button above.
+                </p>
+              </div>
+            ) : (
+              <div className="crud-table-wrapper">
+                <table className="crud-table">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Role</th>
+                      <th>Company</th>
+                      <th>Testimonial</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    {testimonials.map(
+                      (testimonial) => (
+                        <tr key={testimonial.id}>
+                          <td>
+                            <div className="crud-project-title">
+                              {testimonial.name}
+                            </div>
+                          </td>
+
+                          <td>
+                            <span className="crud-experience-role">
+                              {testimonial.role}
+                            </span>
+                          </td>
+
+                          <td>
+                            <span className="crud-skill-category">
+                              {testimonial.company}
+                            </span>
+                          </td>
+
+                          <td>
+                            <div className="crud-project-description">
+                              {testimonial.content}
+                            </div>
+                          </td>
+
+                          <td>
+                            <div className="crud-row-actions">
+                              <button
+                                type="button"
+                                className="crud-button crud-button-small"
+                                onClick={() =>
+                                  handleEdit(
+                                    testimonial.id,
+                                  )
+                                }
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                type="button"
+                                className="crud-button crud-button-small crud-button-danger"
+                                onClick={() =>
+                                  handleDelete(
+                                    testimonial.id,
+                                  )
+                                }
+                              >
+                                Delete
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      ),
+                    )}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </section>
         </>
       ) : (
         <>
-          <h1>
-            {editingId
-              ? "Edit Testimonial"
-              : "Add Testimonial"}
-          </h1>
-
-          {error && <p>{error}</p>}
-          {success && <p>{success}</p>}
-
-          <form onSubmit={handleSubmit}>
+          <section className="crud-header">
             <div>
-              <label htmlFor="testimonial-name">
-                Name
-              </label>
+              <p className="crud-eyebrow">
+                SOCIAL PROOF
+              </p>
 
-              <input
-                id="testimonial-name"
-                type="text"
-                value={form.name}
-                onChange={(event) =>
-                  handleChange("name", event.target.value)
-                }
-                required
-              />
+              <h1>
+                {editingId
+                  ? "Edit Testimonial"
+                  : "Add Testimonial"}
+              </h1>
+
+              <p className="crud-description">
+                {editingId
+                  ? "Update the testimonial information below."
+                  : "Add a new testimonial to your portfolio."}
+              </p>
+            </div>
+          </section>
+
+          {error && (
+            <div
+              className="crud-message crud-message-error"
+              role="alert"
+            >
+              {error}
+            </div>
+          )}
+
+          {success && (
+            <div
+              className="crud-message crud-message-success"
+              role="status"
+            >
+              {success}
+            </div>
+          )}
+
+          <section className="crud-form-section">
+            <div className="crud-section-header">
+              <div>
+                <h2>Testimonial details</h2>
+
+                <p>
+                  Enter the details of the person and
+                  their feedback.
+                </p>
+              </div>
             </div>
 
-            <div>
-              <label htmlFor="testimonial-role">
-                Role
-              </label>
+            <form
+              className="crud-form"
+              onSubmit={handleSubmit}
+            >
+              <div className="crud-form-grid">
+                <div className="crud-field">
+                  <label htmlFor="testimonial-name">
+                    Name
+                  </label>
 
-              <input
-                id="testimonial-role"
-                type="text"
-                value={form.role}
-                onChange={(event) =>
-                  handleChange("role", event.target.value)
-                }
-                required
-              />
-            </div>
+                  <input
+                    id="testimonial-name"
+                    type="text"
+                    value={form.name}
+                    onChange={(event) =>
+                      handleChange(
+                        "name",
+                        event.target.value,
+                      )
+                    }
+                    placeholder="Enter person's name"
+                    required
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="testimonial-company">
-                Company
-              </label>
+                <div className="crud-field">
+                  <label htmlFor="testimonial-role">
+                    Role
+                  </label>
 
-              <input
-                id="testimonial-company"
-                type="text"
-                value={form.company}
-                onChange={(event) =>
-                  handleChange(
-                    "company",
-                    event.target.value,
-                  )
-                }
-                required
-              />
-            </div>
+                  <input
+                    id="testimonial-role"
+                    type="text"
+                    value={form.role}
+                    onChange={(event) =>
+                      handleChange(
+                        "role",
+                        event.target.value,
+                      )
+                    }
+                    placeholder="Enter person's role"
+                    required
+                  />
+                </div>
 
-            <div>
-              <label htmlFor="testimonial-content">
-                Testimonial
-              </label>
+                <div className="crud-field">
+                  <label htmlFor="testimonial-company">
+                    Company
+                  </label>
 
-              <textarea
-                id="testimonial-content"
-                value={form.content}
-                onChange={(event) =>
-                  handleChange(
-                    "content",
-                    event.target.value,
-                  )
-                }
-                rows={6}
-                required
-              />
-            </div>
+                  <input
+                    id="testimonial-company"
+                    type="text"
+                    value={form.company}
+                    onChange={(event) =>
+                      handleChange(
+                        "company",
+                        event.target.value,
+                      )
+                    }
+                    placeholder="Enter company name"
+                    required
+                  />
+                </div>
+              </div>
 
-            <div style={{ marginTop: "20px" }}>
-              <button
-                type="submit"
-                disabled={saving}
-                style={{ marginRight: "10px" }}
-              >
-                {saving
-                  ? "Saving..."
-                  : editingId
-                    ? "Update Testimonial"
-                    : "Add Testimonial"}
-              </button>
+              <div className="crud-field">
+                <label htmlFor="testimonial-content">
+                  Testimonial
+                </label>
 
-              <button
-                type="button"
-                onClick={handleCancel}
-                disabled={saving}
-              >
-                Cancel
-              </button>
-            </div>
-          </form>
+                <textarea
+                  id="testimonial-content"
+                  value={form.content}
+                  onChange={(event) =>
+                    handleChange(
+                      "content",
+                      event.target.value,
+                    )
+                  }
+                  rows={8}
+                  placeholder="Enter the testimonial content."
+                  required
+                />
+              </div>
+
+              <div className="crud-form-actions">
+                <button
+                  type="submit"
+                  className="crud-button crud-button-primary"
+                  disabled={saving}
+                >
+                  {saving
+                    ? "Saving..."
+                    : editingId
+                      ? "Update Testimonial"
+                      : "Add Testimonial"}
+                </button>
+
+                <button
+                  type="button"
+                  className="crud-button crud-button-secondary"
+                  onClick={cancelForm}
+                  disabled={saving}
+                >
+                  Cancel
+                </button>
+              </div>
+            </form>
+          </section>
         </>
       )}
-    </section>
+    </div>
   );
 }
